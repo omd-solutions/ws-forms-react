@@ -1,25 +1,57 @@
-import React, {Component, ReactNode} from "react";
+import React, {useEffect, useState} from "react";
+import {EntityConfig} from "./EntityConfig";
+import PanelForm from "./PanelForm";
+import {FormField} from "./FormField";
 
 type Props = {
-    brokerUrl?: string
-    msgEndpoint?: string
+    entity: string | EntityConfig,
+    object: any | undefined,
+    onEntityChange: (updatedObject: any) => void,
 }
 
-type State = {
-    tabIndex: number
-}
+const FormTypeMap: any = {
+    "PANELS": PanelForm,
+    "TABS": PanelForm
+};
 
-class EntityForm extends Component<Props, State> {
+function EntityForm(props: Props) {
 
-    constructor(props: Props) {
-        super(props);
-        this.state = {tabIndex: 0};
+    const [entityConfig, setEntityConfig] = useState(new EntityConfig());
+
+    useEffect(() => {
+        if(typeof props.entity === 'string') {
+            fetch('/api/forms?entity=' + props.entity).then(resp => {
+                return resp.json();
+            }).then(json => {
+                setEntityConfig(json);
+            })
+        } else {
+            setEntityConfig(props.entity);
+        }
+    }, [props.entity]);
+
+    const handleEntityChange = (formField: FormField, value: any) => {
+        let updatedObject = Object.assign({}, props.object);
+        updatedObject[formField.fieldName] = value;
+        props.onEntityChange(updatedObject);
+    };
+
+    const renderSections = () => {
+        return FormTypeMap[entityConfig.sectionType]({
+            entity: props.entity,
+            entityConfig: entityConfig,
+            onEntityChange: handleEntityChange
+        });
+    };
+
+    if (!entityConfig.name) {
+        return null;
     }
-
-    render(): ReactNode {
-
-    }
-
+    return (
+        <div>
+            {renderSections()}
+        </div>
+    );
 }
 
 export default EntityForm
