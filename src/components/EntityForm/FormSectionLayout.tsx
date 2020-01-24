@@ -4,6 +4,7 @@ import {Grid} from "@material-ui/core";
 import {FormField} from "./FormField";
 import TextControl from "./TextControl";
 import FormControl from "./FormControl";
+import SelectControl from "./SelectControl";
 
 type Props = {
     sectionConfig: FormSection,
@@ -14,7 +15,8 @@ type Props = {
 function FormSectionLayout(props: Props) {
 
     const ControlTypeMap: any = {
-        "TEXT": TextControl
+        "TEXT": TextControl,
+        "SELECT": SelectControl
     };
 
     const renderField = (formField: FormField): React.ReactNode => {

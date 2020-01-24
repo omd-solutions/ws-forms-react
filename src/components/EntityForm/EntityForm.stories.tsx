@@ -27,6 +27,27 @@ const entityConfig: EntityConfig = {
                     caption: "Address",
                     columns: 12,
                     controlType: "TEXT"
+                },
+                {
+                    fieldName: "country",
+                    caption: "Country",
+                    columns: 6,
+                    controlType: "SELECT",
+                    displayField: "name",
+                    values: [
+                        {
+                            id: 'uk',
+                            name: 'United Kingdom'
+                        },
+                        {
+                            id: 'us',
+                            name: 'United States'
+                        },
+                        {
+                            id: 'france',
+                            name: 'France'
+                        }
+                    ]
                 }
             ]
         }
