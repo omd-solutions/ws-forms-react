@@ -12,18 +12,26 @@ type Props = {
 
 function PanelForm(props: Props) {
 
-    return props.entityConfig.sections.map((section, idx) => (
-            <Paper key={'section-' + idx} >
+    return props.entityConfig.sections.map((section, idx) => {
+        let sectionHeading = null;
+        if("NO_SECTION" != section.caption) {
+            sectionHeading = (
                 <Typography
                     component="h4"
                     variant="h4"
                     gutterBottom>
                     {section.caption}
                 </Typography>
-                <FormSectionLayout sectionConfig={section} entity={props.entity}
-                                   onEntityChange={props.onEntityChange}/>
-            </Paper>
-        )
+            );
+        }
+        return (
+                <Paper key={'section-' + idx} >
+                    {sectionHeading}
+                    <FormSectionLayout sectionConfig={section} entity={props.entity}
+                                       onEntityChange={props.onEntityChange}/>
+                </Paper>
+            )
+        }
     );
 }
 
