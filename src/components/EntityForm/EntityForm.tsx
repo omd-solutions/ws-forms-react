@@ -38,7 +38,7 @@ function EntityForm(props: Props) {
 
     const renderSections = () => {
         return FormTypeMap[entityConfig.sectionType]({
-            entity: props.entity,
+            entity: props.object,
             entityConfig: entityConfig,
             onEntityChange: handleEntityChange
         });
