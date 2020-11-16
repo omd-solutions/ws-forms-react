@@ -5,6 +5,8 @@ import {FormField} from "./FormField";
 import TextControl from "./TextControl";
 import FormControl from "./FormControl";
 import SelectControl from "./SelectControl";
+import DateControl from "./DateControl";
+import DateTimeControl from "./DateTimeControl";
 
 type Props = {
     sectionConfig: FormSection,
@@ -16,7 +18,9 @@ function FormSectionLayout(props: Props) {
 
     const ControlTypeMap: any = {
         "TEXT": TextControl,
-        "SELECT": SelectControl
+        "SELECT": SelectControl,
+        "DATE": DateControl,
+        "DATE_TIME": DateTimeControl
     };
 
     const renderField = (formField: FormField): React.ReactNode => {

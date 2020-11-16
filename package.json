@@ -11,17 +11,20 @@
     "README.md"
   ],
   "dependencies": {
+    "@date-io/date-fns": "^2.4.0",
     "moment": "^2.24.0"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/pickers": "^3.2.10",
     "react": "^16.11.0",
     "react-dom": "^16.11.0"
   },
   "devDependencies": {
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/pickers": "^3.2.10",
     "@storybook/addon-actions": "^5.2.5",
     "@storybook/addon-links": "^5.2.5",
     "@storybook/addons": "^5.2.5",
