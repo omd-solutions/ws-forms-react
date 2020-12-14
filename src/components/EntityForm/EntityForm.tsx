@@ -3,7 +3,7 @@ import {EntityConfig} from "./EntityConfig";
 import PanelForm from "./PanelForm";
 import {FormField} from "./FormField";
 
-type Props = {
+export type Props = {
     entity: string | EntityConfig,
     object: any | undefined,
     onEntityChange: (updatedObject: any) => void,
@@ -14,7 +14,7 @@ const FormTypeMap: any = {
     "TABS": PanelForm
 };
 
-function EntityForm(props: Props) {
+export default function EntityForm(props: Props) {
 
     const [entityConfig, setEntityConfig] = useState(new EntityConfig());
 
@@ -53,5 +53,3 @@ function EntityForm(props: Props) {
         </div>
     );
 }
-
-export default EntityForm

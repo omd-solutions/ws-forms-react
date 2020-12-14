@@ -19,6 +19,7 @@ function FormSectionLayout(props: Props) {
     const ControlTypeMap: any = {
         "TEXT": TextControl,
         "SELECT": SelectControl,
+        "FILTERED_SELECT": SelectControl,
         "DATE": DateControl,
         "DATE_TIME": DateTimeControl
     };
@@ -28,8 +29,8 @@ function FormSectionLayout(props: Props) {
         return control.render(formField, props.entity[formField.fieldName], value => props.onEntityChange(formField, value));
     };
 
-    let sectionFields = props.sectionConfig.fields.map(formField => (
-        <Grid key={'field-' + formField.fieldName} xs={formField.columns} style={{padding: '6px', boxSizing: 'border-box'}} >
+    let sectionFields = props.sectionConfig.fields.map((formField: FormField) => (
+        <Grid item key={'field-' + formField.fieldName} xs={formField.columns} style={{padding: '6px', boxSizing: 'border-box'}} >
             {renderField(formField)}
         </Grid>
     ));

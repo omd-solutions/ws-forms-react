@@ -10,8 +10,8 @@ class TextControl implements FormControl<string> {
             <TextField id={'control-' + field.fieldName}
                        fullWidth
                        label={field.caption}
-                       value={value}
-                       onChange={event => valueSetter(event.target.value)} />
+                       value={value ? value : ''}
+                       onChange={event => valueSetter(event.target.value)}/>
         );
     }
 
