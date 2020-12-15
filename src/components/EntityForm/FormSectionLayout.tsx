@@ -19,7 +19,6 @@ function FormSectionLayout(props: Props) {
     const ControlTypeMap: any = {
         "TEXT": TextControl,
         "SELECT": SelectControl,
-        "FILTERED_SELECT": SelectControl,
         "DATE": DateControl,
         "DATE_TIME": DateTimeControl
     };

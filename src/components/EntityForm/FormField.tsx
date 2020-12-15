@@ -7,5 +7,6 @@ export class FormField {
 
     idField?: string;
     displayField?: string;
+    filteredBy?: string;
     values?: any [];
 }
