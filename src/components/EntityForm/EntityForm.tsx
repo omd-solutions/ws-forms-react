@@ -33,22 +33,14 @@ export default function EntityForm(props: Props) {
     useEffect(() => {
         if (props.object) {
             let fieldValues = {};
-            let fetchOptionsQueue: (() => void) [] = [];
             entityConfig.sections.forEach(section => {
                 section.fields.forEach(formField => {
                     if (props.object[formField.fieldName]) {
                         fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
                     }
-                    if (formField.controlType === "SELECT") {
-                        fetchOptionsQueue.push(() => {
-                            if (formField.filteredBy && fieldValues[formField.filteredBy]) {
-                                fetchFieldOptions(formField, fieldValues);
-                            }
-                        });
-                    }
                 });
             });
-            fetchOptionsQueue.forEach(fetchOperation => fetchOperation());
+            fetchFieldOptions(fieldValues);
         }
     }, [props.object]);
 
@@ -58,8 +50,8 @@ export default function EntityForm(props: Props) {
         props.onEntityChange(updatedObject);
     };
 
-    const fetchFieldOptions = (formField: FormField, fieldValues: any) => {
-        fetch('/api/forms/' + props.entity + '/' + formField.fieldName, {
+    const fetchFieldOptions = (fieldValues: any) => {
+        fetch('/api/forms/' + props.entity + '/options', {
             method: 'post',
             body: JSON.stringify(fieldValues),
             headers: {
@@ -72,8 +64,8 @@ export default function EntityForm(props: Props) {
             let newEntityConfig = Object.assign(new EntityConfig(), entityConfig);
             newEntityConfig.sections.forEach(section => {
                 section.fields.forEach(field => {
-                    if (formField.fieldName === field.fieldName) {
-                        field.values = json;
+                    if (json[field.fieldName]) {
+                        field.values = json[field.fieldName];
                     }
                 });
             });
