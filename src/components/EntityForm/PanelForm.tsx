@@ -3,7 +3,7 @@ import {Paper, Typography} from "@material-ui/core";
 import {FormField} from "./FormField";
 import {EntityConfig} from "./EntityConfig";
 import FormSectionLayout from "./FormSectionLayout";
-import {FormSection} from "./FormSection";
+import {FormPanel} from "./FormPanel";
 
 type Props = {
     entityConfig: EntityConfig,
@@ -19,29 +19,33 @@ const styles = {
     }
 };
 
-function PanelForm(props: Props) {
+export default function PanelForm(props: Props) {
 
-    return props.entityConfig.sections.map((section: FormSection, idx: number) => {
+    const panels = props.entityConfig.panels.map((panel: FormPanel, idx: number) => {
             let sectionHeading = null;
-            if ("NO_SECTION" !== section.caption) {
+            if ("NO_PANEL" !== panel.caption) {
                 sectionHeading = (
                     <Typography
                         component="h4"
                         variant="h4"
                         gutterBottom>
-                        {section.caption}
+                        {panel.caption}
                     </Typography>
                 );
             }
             return (
-                <Paper style={styles.panel} key={'section-' + idx}>
+                <Paper style={styles.panel} key={'panel-' + idx}>
                     {sectionHeading}
-                    <FormSectionLayout sectionConfig={section} entity={props.entity}
+                    <FormSectionLayout sectionConfig={panel} entity={props.entity}
                                        onEntityChange={props.onEntityChange}/>
                 </Paper>
             )
         }
     );
-}
 
-export default PanelForm;
+    return (
+        <div>
+            {panels}
+        </div>
+    );
+}

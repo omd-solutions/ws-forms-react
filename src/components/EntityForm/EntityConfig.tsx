@@ -1,9 +1,8 @@
-import {FormSection} from "./FormSection";
+import {FormPanel} from "./FormPanel";
 
 export class EntityConfig {
 
     name: string;
-    sectionType: string;
-    sections: FormSection [] = [];
+    panels: FormPanel [] = [];
     filterFields: string [] = [];
 }

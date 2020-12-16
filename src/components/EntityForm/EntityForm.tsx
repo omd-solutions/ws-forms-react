@@ -9,11 +9,6 @@ export type Props = {
     onEntityChange: (updatedObject: any) => void,
 }
 
-const FormTypeMap: any = {
-    "PANELS": PanelForm,
-    "TABS": PanelForm
-};
-
 export default function EntityForm(props: Props) {
 
     const [entityConfig, setEntityConfig] = useState(new EntityConfig());
@@ -48,7 +43,7 @@ export default function EntityForm(props: Props) {
 
     const getCurrentFieldValues = (): any => {
         let fieldValues = {};
-        entityConfig.sections.forEach(section => {
+        entityConfig.panels.forEach(section => {
             section.fields.forEach(formField => {
                 if (props.object[formField.fieldName]) {
                     fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
@@ -76,7 +71,7 @@ export default function EntityForm(props: Props) {
             return resp.json();
         }).then(json => {
             let newEntityConfig = Object.assign(new EntityConfig(), entityConfig);
-            newEntityConfig.sections.forEach(section => {
+            newEntityConfig.panels.forEach(section => {
                 section.fields.forEach(field => {
                     if (json[field.fieldName]) {
                         field.values = json[field.fieldName];
@@ -87,20 +82,13 @@ export default function EntityForm(props: Props) {
         });
     };
 
-    const renderSections = () => {
-        return FormTypeMap[entityConfig.sectionType]({
-            entity: props.object,
-            entityConfig: entityConfig,
-            onEntityChange: handleEntityChange
-        });
-    };
-
     if (!entityConfig.name) {
         return null;
     }
+
     return (
         <div>
-            {renderSections()}
+            <PanelForm entity={props.object} entityConfig={entityConfig} onEntityChange={handleEntityChange} />
         </div>
     );
 }

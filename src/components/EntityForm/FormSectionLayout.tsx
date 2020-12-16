@@ -1,5 +1,5 @@
 import React from "react";
-import {FormSection} from "./FormSection";
+import {FormPanel} from "./FormPanel";
 import {Grid} from "@material-ui/core";
 import {FormField} from "./FormField";
 import TextControl from "./TextControl";
@@ -9,7 +9,7 @@ import DateControl from "./DateControl";
 import DateTimeControl from "./DateTimeControl";
 
 type Props = {
-    sectionConfig: FormSection,
+    sectionConfig: FormPanel,
     entity: any | undefined,
     onEntityChange: (formField: FormField, value: any) => void
 }

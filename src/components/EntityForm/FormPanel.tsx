@@ -1,6 +1,6 @@
 import {FormField} from "./FormField";
 
-export class FormSection {
+export class FormPanel {
 
     caption: string;
     fields: FormField [] = [];

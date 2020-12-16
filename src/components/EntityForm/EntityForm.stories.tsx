@@ -7,7 +7,7 @@ import {action} from "@storybook/addon-actions";
 const entityConfig: EntityConfig = {
     name: "Employee",
     sectionType: "PANELS",
-    sections: [
+    panels: [
         {
             caption: "Personal Details",
             fields: [
