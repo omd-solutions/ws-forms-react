@@ -5,4 +5,5 @@ export class EntityConfig {
     name: string;
     sectionType: string;
     sections: FormSection [] = [];
+    filterFields: string [] = [];
 }

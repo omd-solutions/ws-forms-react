@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {EntityConfig} from "./EntityConfig";
 import PanelForm from "./PanelForm";
 import {FormField} from "./FormField";
@@ -17,6 +17,7 @@ const FormTypeMap: any = {
 export default function EntityForm(props: Props) {
 
     const [entityConfig, setEntityConfig] = useState(new EntityConfig());
+    const prevObject = usePrevious(props.object);
 
     useEffect(() => {
         if (typeof props.entity === 'string') {
@@ -31,18 +32,31 @@ export default function EntityForm(props: Props) {
     }, [props.entity]);
 
     useEffect(() => {
-        if (props.object) {
-            let fieldValues = {};
-            entityConfig.sections.forEach(section => {
-                section.fields.forEach(formField => {
-                    if (props.object[formField.fieldName]) {
-                        fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
-                    }
-                });
-            });
-            fetchFieldOptions(fieldValues);
+        let filtersChanged = false;
+        if (props.object && prevObject) {
+            for (let f of entityConfig.filterFields) {
+                if (props.object[f] !== prevObject[f]) {
+                    filtersChanged = true;
+                    break;
+                }
+            }
+        }
+        if (filtersChanged) {
+            fetchFieldOptions(getCurrentFieldValues());
         }
     }, [props.object]);
+
+    const getCurrentFieldValues = (): any => {
+        let fieldValues = {};
+        entityConfig.sections.forEach(section => {
+            section.fields.forEach(formField => {
+                if (props.object[formField.fieldName]) {
+                    fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
+                }
+            });
+        });
+        return fieldValues;
+    };
 
     const handleEntityChange = (formField: FormField, value: any) => {
         let updatedObject = Object.assign({}, props.object);
@@ -90,3 +104,11 @@ export default function EntityForm(props: Props) {
         </div>
     );
 }
+
+const usePrevious = <T extends unknown>(value: T): T | undefined => {
+    const ref = useRef<T>();
+    useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+};
