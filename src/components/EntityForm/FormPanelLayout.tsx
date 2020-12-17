@@ -9,12 +9,12 @@ import DateControl from "./DateControl";
 import DateTimeControl from "./DateTimeControl";
 
 type Props = {
-    sectionConfig: FormPanel,
+    panelConfig: FormPanel,
     entity: any | undefined,
-    onEntityChange: (formField: FormField, value: any) => void
+    onEntityChange: (formField: FormField, value: any, error: boolean) => void
 }
 
-function FormSectionLayout(props: Props) {
+function FormPanelLayout(props: Props) {
 
     const ControlTypeMap: any = {
         "TEXT": TextControl,
@@ -25,10 +25,11 @@ function FormSectionLayout(props: Props) {
 
     const renderField = (formField: FormField): React.ReactNode => {
         let control: FormControl<any> = new ControlTypeMap[formField.controlType]();
-        return control.render(formField, props.entity[formField.fieldName], value => props.onEntityChange(formField, value));
+        return control.render(formField, props.entity[formField.fieldName],
+            (value: any, error?: boolean) => props.onEntityChange(formField, value, error === undefined ? false : error));
     };
 
-    let sectionFields = props.sectionConfig.fields.map((formField: FormField) => (
+    let panelFields = props.panelConfig.fields.map((formField: FormField) => (
         <Grid item key={'field-' + formField.fieldName} xs={formField.columns} style={{padding: '6px', boxSizing: 'border-box'}} >
             {renderField(formField)}
         </Grid>
@@ -36,9 +37,9 @@ function FormSectionLayout(props: Props) {
 
     return (
         <Grid container>
-            {sectionFields}
+            {panelFields}
         </Grid>
     );
 }
 
-export default FormSectionLayout;
+export default FormPanelLayout;

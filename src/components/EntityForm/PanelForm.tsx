@@ -1,14 +1,14 @@
 import React from "react";
 import {Paper, Typography} from "@material-ui/core";
 import {FormField} from "./FormField";
-import FormSectionLayout from "./FormSectionLayout";
+import FormPanelLayout from "./FormPanelLayout";
 import {FormPanel} from "./FormPanel";
 import {FormTab} from "./FormTab";
 
 type Props = {
     tabConfig: FormTab,
     entity: any | undefined,
-    onEntityChange: (formField: FormField, value: any) => void
+    onEntityChange: (formField: FormField, value: any, error: boolean) => void
 }
 
 const styles = {
@@ -36,8 +36,8 @@ export default function PanelForm(props: Props) {
             return (
                 <Paper style={styles.panel} key={'panel-' + idx}>
                     {sectionHeading}
-                    <FormSectionLayout sectionConfig={panel} entity={props.entity}
-                                       onEntityChange={props.onEntityChange}/>
+                    <FormPanelLayout panelConfig={panel} entity={props.entity}
+                                     onEntityChange={props.onEntityChange}/>
                 </Paper>
             )
         }

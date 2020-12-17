@@ -5,21 +5,25 @@ import React, {ReactNode} from "react";
 
 class TextControl implements FormControl<string> {
 
-    render(field: FormField, value: string, valueSetter: (value: string) => void): ReactNode {
+    render(field: FormField, value: string, valueSetter: (value: string, error?: boolean) => void): ReactNode {
 
-        const isInvalid =
-            field.validationRegex !== undefined &&
-            value !== undefined && value !== null &&
-            value.match(new RegExp(field.validationRegex)) === null;
+        const isValid = (str: string): boolean => {
+            return field.validationRegex === undefined ||
+                str === undefined ||
+                str === null ||
+                str.match(new RegExp(field.validationRegex)) !== null;
+        };
+
+        const valueValid = isValid(value);
 
         return (
             <TextField id={'control-' + field.fieldName}
                        fullWidth
-                       error={isInvalid}
-                       helperText={isInvalid ? field.validationMessage : undefined}
+                       error={!valueValid}
+                       helperText={valueValid ? undefined : field.validationMessage}
                        label={field.caption}
                        value={value ? value : ''}
-                       onChange={event => valueSetter(event.target.value)}/>
+                       onChange={event => valueSetter(event.target.value, !isValid(event.target.value))}/>
         );
     }
 

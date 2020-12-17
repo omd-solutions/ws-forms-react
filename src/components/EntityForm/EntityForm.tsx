@@ -7,7 +7,7 @@ import {AppBar, Box, Tab, Tabs} from "@material-ui/core";
 export type Props = {
     entity: string | EntityConfig,
     object: any | undefined,
-    onEntityChange: (updatedObject: any) => void,
+    onEntityChange: (updatedObject: any, error: boolean) => void,
 }
 
 export default function EntityForm(props: Props) {
@@ -57,10 +57,10 @@ export default function EntityForm(props: Props) {
         return fieldValues;
     };
 
-    const handleEntityChange = (formField: FormField, value: any) => {
+    const handleEntityChange = (formField: FormField, value: any, error: boolean) => {
         let updatedObject = Object.assign({}, props.object);
         updatedObject[formField.fieldName] = value;
-        props.onEntityChange(updatedObject);
+        props.onEntityChange(updatedObject, error);
     };
 
     const fetchFieldOptions = (fieldValues: any) => {

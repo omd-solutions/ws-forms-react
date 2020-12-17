@@ -6,7 +6,7 @@ import FormControl from "./FormControl";
 class SelectControl implements FormControl<any> {
 
 
-    render(field: FormField, value: any, valueSetter: (value: any) => void): ReactNode {
+    render(field: FormField, value: any, valueSetter: (value: any, error?: boolean) => void): ReactNode {
         let values = field.values ? field.values : [];
         let controlValue = value && field.idField ? value[field.idField] : value;
         controlValue = controlValue ? controlValue : '';
