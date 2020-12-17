@@ -86,54 +86,54 @@ export default function EntityForm(props: Props) {
                 setEntityConfig(newEntityConfig);
             });
         });
+    }
 
-        if (!entityConfig.name) {
-            return null;
-        }
+    if (!entityConfig.name) {
+        return null;
+    }
 
-        let forms = [];
-        let tabCaptions = [];
+    let forms = [];
+    let tabCaptions = [];
 
-        for (let i in entityConfig.tabs) {
-            forms.push((<PanelForm key={'tab-form-' + i} tabConfig={entityConfig.tabs[i]} entity={props.object}
-                                   onEntityChange={handleEntityChange}/>));
-            tabCaptions.push(entityConfig.tabs[i].caption);
-        }
+    for (let i in entityConfig.tabs) {
+        forms.push((<PanelForm key={'tab-form-' + i} tabConfig={entityConfig.tabs[i]} entity={props.object}
+                               onEntityChange={handleEntityChange}/>));
+        tabCaptions.push(entityConfig.tabs[i].caption);
+    }
 
-        let wrapper = (
+    let wrapper = (
+        <div>
+            {forms}
+        </div>
+    );
+
+    if (tabCaptions.length > 1) {
+        wrapper = (
             <div>
-                {forms}
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={tab}
+                        onChange={(event: React.ChangeEvent<{}>, newValue: number) => setTab(newValue)}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                    >
+                        {tabCaptions.map((tabCaption, idx) => (
+                            <Tab key={'tab-' + idx} label={tabCaption}/>
+                        ))}
+                    </Tabs>
+                </AppBar>
+                {forms.map((form, idx) => (
+                    <TabPanel value={tab} index={idx}>
+                        {form}
+                    </TabPanel>
+                ))}
             </div>
         );
-
-        if (tabCaptions.length > 1) {
-            wrapper = (
-                <div>
-                    <AppBar position="static" color="default">
-                        <Tabs
-                            value={tab}
-                            onChange={(event: React.ChangeEvent<{}>, newValue: number) => setTab(newValue)}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="scrollable"
-                            scrollButtons="auto"
-                        >
-                            {tabCaptions.map((tabCaption, idx) => (
-                                <Tab key={'tab-' + idx} label={tabCaption}/>
-                            ))}
-                        </Tabs>
-                    </AppBar>
-                    {forms.map((form, idx) => (
-                        <TabPanel value={tab} index={idx}>
-                            {form}
-                        </TabPanel>
-                    ))}
-                </div>
-            );
-        }
-
-        return wrapper;
     }
+
+    return wrapper;
 }
 
 const usePrevious = <T extends unknown>(value: T): T | undefined => {
