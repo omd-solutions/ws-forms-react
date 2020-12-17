@@ -1,8 +1,9 @@
-import {FormPanel} from "./FormPanel";
+import {FormTab} from "./FormTab";
+
 
 export class EntityConfig {
 
     name: string;
-    panels: FormPanel [] = [];
+    tabs: FormTab [] = [];
     filterFields: string [] = [];
 }

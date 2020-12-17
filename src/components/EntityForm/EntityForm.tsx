@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {EntityConfig} from "./EntityConfig";
 import PanelForm from "./PanelForm";
 import {FormField} from "./FormField";
+import {AppBar, Box, Tab, Tabs} from "@material-ui/core";
 
 export type Props = {
     entity: string | EntityConfig,
@@ -13,6 +14,7 @@ export default function EntityForm(props: Props) {
 
     const [entityConfig, setEntityConfig] = useState(new EntityConfig());
     const prevObject = usePrevious(props.object);
+    const [tab, setTab] = React.useState(0);
 
     useEffect(() => {
         if (typeof props.entity === 'string') {
@@ -43,11 +45,13 @@ export default function EntityForm(props: Props) {
 
     const getCurrentFieldValues = (): any => {
         let fieldValues = {};
-        entityConfig.panels.forEach(section => {
-            section.fields.forEach(formField => {
-                if (props.object[formField.fieldName]) {
-                    fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
-                }
+        entityConfig.tabs.forEach(tab => {
+            tab.panels.forEach(panel => {
+                panel.fields.forEach(formField => {
+                    if (props.object[formField.fieldName]) {
+                        fieldValues[formField.fieldName] = formField.idField ? props.object[formField.fieldName][formField.idField] : props.object[formField.fieldName]
+                    }
+                });
             });
         });
         return fieldValues;
@@ -71,26 +75,65 @@ export default function EntityForm(props: Props) {
             return resp.json();
         }).then(json => {
             let newEntityConfig = Object.assign(new EntityConfig(), entityConfig);
-            newEntityConfig.panels.forEach(section => {
-                section.fields.forEach(field => {
-                    if (json[field.fieldName]) {
-                        field.values = json[field.fieldName];
-                    }
+            newEntityConfig.tabs.forEach(tab => {
+                tab.panels.forEach(panel => {
+                    panel.fields.forEach(field => {
+                        if (json[field.fieldName]) {
+                            field.values = json[field.fieldName];
+                        }
+                    });
                 });
+                setEntityConfig(newEntityConfig);
             });
-            setEntityConfig(newEntityConfig);
         });
-    };
 
-    if (!entityConfig.name) {
-        return null;
+        if (!entityConfig.name) {
+            return null;
+        }
+
+        let forms = [];
+        let tabCaptions = [];
+
+        for (let i in entityConfig.tabs) {
+            forms.push((<PanelForm key={'tab-form-' + i} tabConfig={entityConfig.tabs[i]} entity={props.object}
+                                   onEntityChange={handleEntityChange}/>));
+            tabCaptions.push(entityConfig.tabs[i].caption);
+        }
+
+        let wrapper = (
+            <div>
+                {forms}
+            </div>
+        );
+
+        if (tabCaptions.length > 1) {
+            wrapper = (
+                <div>
+                    <AppBar position="static" color="default">
+                        <Tabs
+                            value={tab}
+                            onChange={(event: React.ChangeEvent<{}>, newValue: number) => setTab(newValue)}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="scrollable"
+                            scrollButtons="auto"
+                        >
+                            {tabCaptions.map((tabCaption, idx) => (
+                                <Tab key={'tab-' + idx} label={tabCaption}/>
+                            ))}
+                        </Tabs>
+                    </AppBar>
+                    {forms.map((form, idx) => (
+                        <TabPanel value={tab} index={idx}>
+                            {form}
+                        </TabPanel>
+                    ))}
+                </div>
+            );
+        }
+
+        return wrapper;
     }
-
-    return (
-        <div>
-            <PanelForm entity={props.object} entityConfig={entityConfig} onEntityChange={handleEntityChange} />
-        </div>
-    );
 }
 
 const usePrevious = <T extends unknown>(value: T): T | undefined => {
@@ -100,3 +143,29 @@ const usePrevious = <T extends unknown>(value: T): T | undefined => {
     });
     return ref.current;
 };
+
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: any;
+    value: any;
+}
+
+function TabPanel(props: TabPanelProps) {
+    const {children, value, index, ...other} = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`scrollable-auto-tabpanel-${index}`}
+            aria-labelledby={`scrollable-auto-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
