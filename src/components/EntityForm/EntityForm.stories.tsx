@@ -33,6 +33,12 @@ const entityConfig: EntityConfig = {
                 "validationRegex" : "0[0-9]{10}",
                 "validationMessage" : "Must be 11 digits and start with a 0"
             }, {
+                "fieldName" : "password",
+                "caption" : "Password",
+                "columns" : 6,
+                "controlType" : "TEXT",
+                "masked": true
+            }, {
                 "fieldName" : "country",
                 "caption" : "Country",
                 "columns" : 6,
@@ -61,6 +67,7 @@ const entities: any = {
         lastName: 'Dennis',
         address: '3 Overdale Place',
         phoneNumber: '07968532252',
+        password: 'password123',
         country: {
             id: 'uk',
             name: 'United Kingdom'

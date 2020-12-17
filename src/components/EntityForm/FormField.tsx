@@ -11,4 +11,5 @@ export class FormField {
 
     validationRegex?: string;
     validationMessage?: string;
+    masked?: boolean;
 }
